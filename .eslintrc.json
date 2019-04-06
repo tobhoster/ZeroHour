@@ -4,7 +4,7 @@
         "es6": true,
         "node": true
     },
-    "extends": "airbnb",
+    "extends": "react-app",
     "globals": {
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly"
@@ -19,6 +19,5 @@
     "plugins": [
         "react"
     ],
-    "rules": {
-    }
+    "rules": {}
 }
