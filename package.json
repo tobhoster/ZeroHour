@@ -3,19 +3,27 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "axios": "^0.18.0",
     "chai": "^4.2.0",
+    "dotenv": "^7.0.0",
     "firebase": "^5.9.3",
     "husky": "^1.3.1",
     "lint-staged": "^8.1.5",
     "lodash": "^4.17.11",
     "prettier": "^1.16.4",
+    "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-helmet": "^5.2.0",
+    "react-redux": "^6.0.1",
     "react-router-dom": "^5.0.0",
     "react-scripts": "2.1.8",
     "redux": "^4.0.1",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.3.0",
     "rxfire": "^3.3.10",
-    "rxjs": "^6.4.0"
+    "rxjs": "^6.4.0",
+    "semantic-ui-react": "^0.86.0"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
@@ -39,8 +47,6 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "eslint-plugin-react": "^7.12.4",
-    "jest": "^24.7.1",
     "react-test-renderer": "^16.8.6"
   },
   "husky": {
