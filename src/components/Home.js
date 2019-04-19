@@ -12,6 +12,7 @@ import moment from 'moment';
 import { getMovieGenre, fetchDiscoverMovie } from '../actions';
 import Footer from '../containers/Footer';
 import CircularProgressbar from '../containers/CircularProgressBar';
+import ZeroHourMenu from '../containers/ZeroHourMenu';
 
 const defaultTextColor = {
   color: 'white',
@@ -69,6 +70,9 @@ class Home extends Component {
     return (
       <div>
         <Grid>
+          <Grid.Row>
+            <ZeroHourMenu />
+          </Grid.Row>
           <Grid.Row
             verticalAlign="bottom"
             style={{

@@ -11,6 +11,7 @@ export const GET_MOVIE_REQUEST = 'GET_MOVIE_REQUEST';
 export const MOVIE_RECOMMENDATIONS = 'MOVIE_RECOMMENDATIONS';
 export const MOVIES_CASTS = 'MOVIES_CASTS';
 export const GET_IMDB_INFO = 'GET_IMDB_INFO';
+export const MOVIE_REVIEWS = 'MOVIE_REVIEWS';
 
 export function selectMovie(movie) {
   return {
@@ -83,6 +84,14 @@ function getMovieList(genres) {
   return {
     type: MOVIE_GENRES,
     genres
+  };
+}
+
+function movieReviews(id, reviews) {
+  return {
+    type: MOVIE_REVIEWS,
+    id,
+    reviews
   };
 }
 
@@ -185,6 +194,19 @@ export function getMovieCredits(id) {
       )
       .then(response => response.data)
       .then(credits => dispatch(movieCredits(id, credits)));
+  };
+}
+
+export function getMovieReviews(id) {
+  return dispatch => {
+    return axios
+      .get(
+        `https://api.themoviedb.org/3/movie/${id}/reviews?api_key=${
+          process.env.REACT_APP_MOVIE_DB_API_KEY
+        }&language=en-US&page=1`
+      )
+      .then(response => response.data.results)
+      .then(reviews => dispatch(movieReviews(id, reviews)));
   };
 }
 

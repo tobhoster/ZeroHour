@@ -13,7 +13,8 @@ import {
   queryForDetails,
   getRecommendationMovie,
   getMovieCredits,
-  getIMDBMovieInfo
+  getIMDBMovieInfo,
+  getMovieReviews
 } from '../actions';
 import PropTypes from 'prop-types';
 import currencyFormatter from 'currency-formatter';
@@ -25,6 +26,7 @@ import MovieRecommendations from '../containers/MovieRecommendations';
 import MovieInfo from '../containers/MovieInfo';
 import Footer from '../containers/Footer';
 import CarouselMovieCredits from '../containers/CarouselMovieCredits';
+import Reviews from '../containers/Reviews';
 
 const defaultTextColor = {
   color: 'white',
@@ -131,15 +133,17 @@ class MovieDetails extends Component {
     dispatch(getRecommendationMovie(params.movieId));
     dispatch(getMovieCredits(params.movieId));
     dispatch(getIMDBMovieInfo(params.movieId));
+    dispatch(getMovieReviews(params.movieId));
   }
 
   render() {
-    const { detail, recommendations, credits, imdb } = this.props;
+    const { detail, recommendations, credits, imdb, reviews } = this.props;
     const genres = detail.genres === undefined ? [] : detail.genres;
     const videos = detail.videos === undefined ? [] : detail.videos.results;
     const images = detail.images === undefined ? [] : detail.images.backdrops;
     const movieRecommendations =
       recommendations === undefined ? [] : recommendations;
+    const movieReviews = reviews === undefined ? [] : reviews;
     const casts = credits === undefined ? [] : credits.cast;
     const movieImdb = imdb === undefined ? {} : imdb;
     const max = images.length;
@@ -166,6 +170,8 @@ class MovieDetails extends Component {
         <CarouselImages images={images} />
         {/* Videos */}
         <CarouselVideos images={images} max={max} videos={videos} />
+        {/* Reviews */}
+        <Reviews reviews={movieReviews} />
         {/* Movies Recommendations */}
         <MovieRecommendations
           recommendations={movieRecommendations}
@@ -197,14 +203,15 @@ MovieDetailsStatistics.propTypes = {
 
 function mapStateToProps(state) {
   const { discovery } = state;
-  const { detail, recommendations, credits, imdb } = discovery;
+  const { detail, recommendations, credits, imdb, reviews } = discovery;
   console.log('MovieDetails - mapStateToProps: ', detail);
 
   return {
     detail,
     recommendations,
     credits,
-    imdb
+    imdb,
+    reviews
   };
 }
 

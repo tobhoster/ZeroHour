@@ -10,7 +10,8 @@ import {
   GET_MOVIE_REQUEST,
   MOVIE_RECOMMENDATIONS,
   MOVIES_CASTS,
-  GET_IMDB_INFO
+  GET_IMDB_INFO,
+  MOVIE_REVIEWS
 } from '../actions';
 
 function selectedMovie(state = '', action) {
@@ -101,6 +102,12 @@ function discovery(
         isFetching: false,
         id: action.id,
         credits: action.credits
+      });
+    case MOVIE_REVIEWS:
+      return Object.assign({}, state, {
+        isFetching: false,
+        id: action.id,
+        reviews: action.reviews
       });
     case GET_IMDB_INFO:
       return Object.assign({}, state, {
