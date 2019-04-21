@@ -20,13 +20,14 @@ import PropTypes from 'prop-types';
 import currencyFormatter from 'currency-formatter';
 import { withRouter } from 'react-router-dom';
 
-import CarouselVideos from '../containers/CarouselVideos';
-import CarouselImages from '../containers/CarouselImages';
-import MovieRecommendations from '../containers/MovieRecommendations';
+import ZeroHourMenu from '../containers/ZeroHourMenu';
 import MovieInfo from '../containers/MovieInfo';
-import Footer from '../containers/Footer';
 import CarouselMovieCredits from '../containers/CarouselMovieCredits';
+import CarouselImages from '../containers/CarouselImages';
+import CarouselVideos from '../containers/CarouselVideos';
 import Reviews from '../containers/Reviews';
+import MovieRecommendations from '../containers/MovieRecommendations';
+import Footer from '../containers/Footer';
 
 const defaultTextColor = {
   color: 'white',
@@ -155,6 +156,9 @@ class MovieDetails extends Component {
             background: '#1A1A1C'
           }}
         >
+          <Grid.Row>
+            <ZeroHourMenu name="restaurants" />
+          </Grid.Row>
           <MovieDetailsHeader detail={detail} genres={genres} />
           <Grid.Row />
         </Grid>

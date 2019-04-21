@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Header, Container, Icon, Comment, Segment } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
+import ReadMore from '../utils/ReadMore';
 
 const defaultTextColor = {
   color: 'white',
@@ -35,7 +36,7 @@ class Reviews extends Component {
             marginBottom: '2rem'
           }}
         >
-          <Icon name="images" size="tiny" style={defaultTextColor} /> Reviews
+          <Icon name="comments" size="tiny" style={defaultTextColor} /> Reviews
         </Header>
 
         <Segment
@@ -52,7 +53,15 @@ class Reviews extends Component {
                 <Comment.Avatar src={avatars[4]} />
                 <Comment.Content>
                   <Comment.Author as="a">{review.author}</Comment.Author>
-                  <Comment.Text>{review.content}</Comment.Text>
+                  <Comment.Text>
+                    <ReadMore
+                      text={review.content}
+                      min={80}
+                      ideal={160}
+                      max={200}
+                      readMoreText="Read More"
+                    />
+                  </Comment.Text>
                 </Comment.Content>
               </Comment>
             ))}

@@ -71,3 +71,14 @@ body {
   font-weight: bold;
   fill: white;
 }
+
+.read-more-button {
+  display: inline-block;
+  margin-left: 3px;
+  color: #286da8;
+  cursor: pointer;
+}
+
+.read-more-button:hover {
+  color: #4591d3;
+}

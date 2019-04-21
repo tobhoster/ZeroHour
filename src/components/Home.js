@@ -71,7 +71,7 @@ class Home extends Component {
       <div>
         <Grid>
           <Grid.Row>
-            <ZeroHourMenu />
+            <ZeroHourMenu name="movies" />
           </Grid.Row>
           <Grid.Row
             verticalAlign="bottom"

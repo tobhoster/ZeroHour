@@ -35,7 +35,7 @@ class MovieRecommendations extends Component {
             marginBottom: '2rem'
           }}
         >
-          <Icon name="images" size="tiny" style={defaultTextColor} />{' '}
+          <Icon name="content" size="tiny" style={defaultTextColor} />{' '}
           Recommendations
         </Header>
         <Card.Group>
