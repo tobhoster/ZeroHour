@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import { Segment, Menu, Container, Image, Input } from 'semantic-ui-react';
+import { Segment, Menu, Container, Image } from 'semantic-ui-react';
+import { connect } from 'react-redux';
 import Logo from '../zero_hour.png';
 import Weather from '../weather.png';
 import { withRouter } from 'react-router-dom';
+import { fetchWeatherConditionUsingGeoLocation } from '../actions';
 
 class ZeroHourMenu extends Component {
   constructor(props) {
@@ -11,8 +13,39 @@ class ZeroHourMenu extends Component {
     this.state = { activeItem: props.name };
   }
 
+  componentDidMount() {
+    const { dispatch } = this.props;
+
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+
+        dispatch(fetchWeatherConditionUsingGeoLocation(latitude, longitude));
+
+        this.setState({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        });
+
+        console.log('componentWillMount: ', this.state);
+      },
+      err => console.log(err)
+    );
+  }
+
   handleItemClick(e, { name }) {
-    this.setState({ activeItem: name });
+    // this.setState({ activeItem: name });
+
+    this.props.history.push(`/movies`);
+  }
+
+  openMovie() {
+    this.props.history.push(`/movies`);
+  }
+
+  openRestaurants() {
+    this.props.history.push(`/restaurants`);
   }
 
   openHomepage() {
@@ -21,6 +54,10 @@ class ZeroHourMenu extends Component {
 
   render() {
     const { activeItem } = this.state;
+    const { temperature } = this.props;
+    const { Imperial } = temperature;
+    const temperatureValue = Imperial !== undefined ? Imperial.Value : NaN;
+    const temperatureUnit = Imperial !== undefined ? Imperial.Unit : 'F';
 
     return (
       <Container>
@@ -57,14 +94,14 @@ class ZeroHourMenu extends Component {
                 name="movies"
                 position="right"
                 active={activeItem === 'movies'}
-                onClick={this.handleItemClick}
+                onClick={() => this.openMovie()}
               />
 
               {/* Resturants */}
               <Menu.Item
                 name="restaurants"
                 active={activeItem === 'restaurants'}
-                onClick={this.handleItemClick}
+                onClick={() => this.openRestaurants()}
               />
 
               {/* Log Out */}
@@ -92,7 +129,7 @@ class ZeroHourMenu extends Component {
                     marginRight: '1rem'
                   }}
                 />
-                {`58 °F`}
+                {`${temperatureValue} °${temperatureUnit}`}
               </Menu.Item>
             </Menu.Menu>
           </Menu>
@@ -102,4 +139,12 @@ class ZeroHourMenu extends Component {
   }
 }
 
-export default withRouter(ZeroHourMenu);
+function mapStateToProps(state) {
+  const { fetchWeather } = state;
+
+  return {
+    temperature: fetchWeather.temperature
+  };
+}
+
+export default withRouter(connect(mapStateToProps)(ZeroHourMenu));

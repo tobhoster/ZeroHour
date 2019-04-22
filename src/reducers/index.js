@@ -6,12 +6,20 @@ import {
   DISCOVER_MOVIES,
   MOVIE_GENRES,
   MOVIE_DETAIL,
-  TRENDING_MOVIES,
   GET_MOVIE_REQUEST,
   MOVIE_RECOMMENDATIONS,
   MOVIES_CASTS,
   GET_IMDB_INFO,
-  MOVIE_REVIEWS
+  MOVIE_REVIEWS,
+  TRENDING_MOVIES,
+  NOW_PLAYING_MOVIES,
+  POPULAR_MOVIES,
+  TOP_RATED_MOVIES,
+  UPCOMING_MOVIES,
+  FETCH_LOCATION,
+  GEOPOSITION_SEARCH,
+  GET_LOCATION_KEY,
+  GET_TEMPERATURE
 } from '../actions';
 
 function selectedMovie(state = '', action) {
@@ -28,7 +36,12 @@ function fetchMovies(
   state = {
     isFetching: false,
     didInvalidate: false,
-    items: []
+    items: [],
+    trending: {},
+    nowPlaying: {},
+    popularMovie: {},
+    topRatedMovie: {},
+    upcomingMovie: {}
   },
   action
 ) {
@@ -46,6 +59,46 @@ function fetchMovies(
         items: action.data,
         lastUpdated: action.receivedAt
       });
+    case TRENDING_MOVIES:
+      return Object.assign({}, state, {
+        isFetching: false,
+        trending: {
+          page: action.page,
+          data: action.data
+        }
+      });
+    case NOW_PLAYING_MOVIES:
+      return Object.assign({}, state, {
+        isFetching: false,
+        nowPlaying: {
+          page: action.page,
+          data: action.data
+        }
+      });
+    case POPULAR_MOVIES:
+      return Object.assign({}, state, {
+        isFetching: false,
+        popularMovie: {
+          page: action.page,
+          data: action.data
+        }
+      });
+    case TOP_RATED_MOVIES:
+      return Object.assign({}, state, {
+        isFetching: false,
+        topRatedMovie: {
+          page: action.page,
+          data: action.data
+        }
+      });
+    case UPCOMING_MOVIES:
+      return Object.assign({}, state, {
+        isFetching: false,
+        upcomingMovie: {
+          page: action.page,
+          data: action.data
+        }
+      });
     default:
       return state;
   }
@@ -58,7 +111,6 @@ function discovery(
     movies: [],
     genres: [],
     detail: {},
-    trending: [],
     recommendations: [],
     imdb: {}
   },
@@ -85,11 +137,6 @@ function discovery(
       return Object.assign({}, state, {
         isFetching: false,
         detail: action.result
-      });
-    case TRENDING_MOVIES:
-      return Object.assign({}, state, {
-        isFetching: false,
-        trending: action.results
       });
     case MOVIE_RECOMMENDATIONS:
       return Object.assign({}, state, {
@@ -119,6 +166,53 @@ function discovery(
   }
 }
 
-const rootReducer = combineReducers({ selectedMovie, fetchMovies, discovery });
+function fetchWeather(
+  state = {
+    isFetching: false,
+    didInvalidate: false,
+    geopostion: {},
+    weatherResult: [],
+    temperature: {}
+  },
+  action
+) {
+  switch (action.type) {
+    case FETCH_LOCATION:
+      return Object.assign({}, state, {
+        isFetching: true,
+        didInvalidate: false
+      });
+    case GEOPOSITION_SEARCH:
+      return Object.assign({}, state, {
+        isFetching: true,
+        didInvalidate: false,
+        geopostion: {
+          latitude: action.latitude,
+          longitude: action.longitude
+        }
+      });
+    case GET_LOCATION_KEY:
+      return Object.assign({}, state, {
+        isFetching: true,
+        didInvalidate: false,
+        location: action.location,
+        weatherResult: action.result
+      });
+    case GET_TEMPERATURE:
+      return Object.assign({}, state, {
+        isFetching: false,
+        didInvalidate: false,
+        temperature: action.temperature
+      });
+    default:
+      return state;
+  }
+}
 
+const rootReducer = combineReducers({
+  selectedMovie,
+  fetchMovies,
+  discovery,
+  fetchWeather
+});
 export default rootReducer;

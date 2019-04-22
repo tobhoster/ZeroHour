@@ -1,18 +1,12 @@
 import React, { Component } from 'react';
-import {
-  Container,
-  Card,
-  Image,
-  Rating,
-  Grid,
-  Header
-} from 'semantic-ui-react';
+import { Image, Grid, Header } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import { getMovieGenre, fetchDiscoverMovie } from '../actions';
 import Footer from '../containers/Footer';
 import CircularProgressbar from '../containers/CircularProgressBar';
 import ZeroHourMenu from '../containers/ZeroHourMenu';
+import MovieCard from '../containers/MovieCard';
 
 const defaultTextColor = {
   color: 'white',
@@ -41,25 +35,6 @@ class Home extends Component {
     console.log('Props: ', this.props);
   }
 
-  componentWillMount() {
-    // navigator.geolocation.getCurrentPosition(
-    //   position => {
-    //     this.setState({
-    //       lat: position.coords.latitude,
-    //       lng: position.coords.longitude
-    //     });
-    //     console.log("componentWillMount: ", this.state);
-    //   },
-    //   err => console.log(err)
-    // );
-  }
-
-  openMovieDetails(title) {
-    console.log(`openMovieDetails - Event: `, title);
-
-    this.props.history.push(`/${title}/details`);
-  }
-
   render() {
     // const { activeItem } = this.state;
     const { movies } = this.props;
@@ -71,7 +46,7 @@ class Home extends Component {
       <div>
         <Grid>
           <Grid.Row>
-            <ZeroHourMenu name="movies" />
+            <ZeroHourMenu name="home" />
           </Grid.Row>
           <Grid.Row
             verticalAlign="bottom"
@@ -130,59 +105,8 @@ class Home extends Component {
               />
             </Grid.Column>
           </Grid.Row>
-          <Container
-            style={{
-              background: '#1A1A1C',
-              marginBottom: '5rem'
-            }}
-          >
-            <Card.Group
-              itemsPerRow={4}
-              style={{
-                marginTop: '1.5rem',
-                marginBottom: '1.5rem'
-              }}
-            >
-              {movies.map((movie, index) => (
-                <Card
-                  key={index.toString()}
-                  className="card"
-                  raised
-                  onClick={() => this.openMovieDetails(movie.id)}
-                >
-                  <Image
-                    src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
-                  />
-                  <Card.Content>
-                    <Card.Header>{movie.original_title}</Card.Header>
-                    <Card.Description
-                      style={{
-                        overflow: 'hidden',
-                        whiteSpace: 'normal',
-                        textOverflow: 'ellipsis',
-                        height: '9.4rem'
-                      }}
-                    >
-                      {movie.overview}
-                    </Card.Description>
-                  </Card.Content>
-
-                  <Rating
-                    style={{
-                      marginTop: '1rem',
-                      marginBottom: '1.2rem',
-                      color: '#41d99e'
-                    }}
-                    disabled
-                    rating={movie.vote_average / 2}
-                    maxRating={5}
-                    icon="star"
-                    size="tiny"
-                  />
-                </Card>
-              ))}
-            </Card.Group>
-          </Container>
+          {/* Movies Card */}
+          <MovieCard movies={movies} />
         </Grid>
         <Footer />
       </div>

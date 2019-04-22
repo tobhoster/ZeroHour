@@ -18,7 +18,6 @@ class Reviews extends Component {
       'https://react.semantic-ui.com/images/avatar/small/joe.jpg',
       'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
     ];
-    const max = reviews.length;
 
     return (
       <Container
