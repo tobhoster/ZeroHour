@@ -20,4 +20,8 @@ firestore.settings(settings);
 export const usersRef = firestore.collection('users');
 export const favoritesRef = firestore.collection('favorites');
 
+export const googleProvider = new app.auth.GoogleAuthProvider();
+export const facebookProvider = new app.auth.FacebookAuthProvider();
+export const twitterProvider = new app.auth.TwitterAuthProvider();
+
 export default app;
