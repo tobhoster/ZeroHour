@@ -82,3 +82,12 @@ body {
 .read-more-button:hover {
   color: #4591d3;
 }
+
+.textButton {
+  margin-top: 1rem;
+}
+
+.textButton:hover {
+  color: #4591d3;
+  margin-top: 1rem;
+}

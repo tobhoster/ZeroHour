@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import { Image, Grid, Header } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import { getMovieGenre, fetchDiscoverMovie } from '../actions';
+import { getMovieGenre, fetchDiscoverMovie } from '../actions/moviesActions';
 import Footer from '../containers/Footer';
 import CircularProgressbar from '../containers/CircularProgressBar';
 import ZeroHourMenu from '../containers/ZeroHourMenu';
@@ -24,6 +25,7 @@ class Home extends Component {
     if (this.props.location !== prevProps.location) {
       window.scrollTo(0, 0);
     }
+    ReactDOM.findDOMNode(this).scrollIntoView();
   }
 
   componentDidMount() {
@@ -31,8 +33,11 @@ class Home extends Component {
     dispatch(fetchDiscoverMovie());
     dispatch(getMovieGenre());
 
-    // console.log("Test: ", dispatch(searchMovie("iron man")));
     console.log('Props: ', this.props);
+  }
+
+  openMovieDetails(title) {
+    this.props.history.push(`/${title}/details`);
   }
 
   render() {

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import {
   Header,
   Image,
@@ -15,7 +16,8 @@ import {
   getMovieCredits,
   getIMDBMovieInfo,
   getMovieReviews
-} from '../actions';
+} from '../actions/moviesActions';
+
 import PropTypes from 'prop-types';
 import currencyFormatter from 'currency-formatter';
 import { withRouter } from 'react-router-dom';
@@ -118,6 +120,7 @@ const MovieDetailsHeader = props => (
 
 class MovieDetails extends Component {
   componentDidUpdate(prevProps) {
+    ReactDOM.findDOMNode(this).scrollIntoView();
     if (this.props.location !== prevProps.location) {
       window.scrollTo(0, 0);
       window.location.reload();
@@ -157,7 +160,7 @@ class MovieDetails extends Component {
           }}
         >
           <Grid.Row>
-            <ZeroHourMenu name="restaurants" />
+            <ZeroHourMenu name="home" />
           </Grid.Row>
           <MovieDetailsHeader detail={detail} genres={genres} />
           <Grid.Row />

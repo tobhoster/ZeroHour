@@ -7,6 +7,7 @@ import './App.css';
 import MovieDetails from './components/MovieDetails';
 import Movies from './components/Movies';
 import Restaurants from './components/Restaurants';
+import Login from './components/Login';
 
 const store = configureStore();
 
@@ -19,6 +20,7 @@ class App extends Component {
           <Route path="/:movieId/details" component={MovieDetails} />
           <Route path="/movies" component={Movies} />
           <Route path="/restaurants" component={Restaurants} />
+          <Route path="/login" component={Login} />
         </Router>
       </Provider>
     );

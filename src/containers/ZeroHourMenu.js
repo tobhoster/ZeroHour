@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { Segment, Menu, Container, Image } from 'semantic-ui-react';
+import { Segment, Menu, Container, Image, Header } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import Logo from '../zero_hour.png';
 import Weather from '../weather.png';
 import { withRouter } from 'react-router-dom';
-import { fetchWeatherConditionUsingGeoLocation } from '../actions';
+import { fetchWeatherConditionUsingGeoLocation } from '../actions/weatherActions';
 
 class ZeroHourMenu extends Component {
   constructor(props) {
@@ -46,6 +46,10 @@ class ZeroHourMenu extends Component {
 
   openRestaurants() {
     this.props.history.push(`/restaurants`);
+  }
+
+  openLoginPage() {
+    this.props.history.push(`/login`);
   }
 
   openHomepage() {
@@ -106,9 +110,9 @@ class ZeroHourMenu extends Component {
 
               {/* Log Out */}
               <Menu.Item
-                name="log in"
-                active={activeItem === 'log in'}
-                onClick={this.handleItemClick}
+                name="login"
+                active={activeItem === 'login'}
+                onClick={() => this.openLoginPage()}
               />
 
               {/* Weather */}
@@ -129,7 +133,12 @@ class ZeroHourMenu extends Component {
                     marginRight: '1rem'
                   }}
                 />
-                {`${temperatureValue} °${temperatureUnit}`}
+                <Header as="h4" inverted>
+                  {`${temperatureValue} °${temperatureUnit}`}
+                  <Header.Subheader>
+                    Temperature <br /> <i>Syosset</i>
+                  </Header.Subheader>
+                </Header>
               </Menu.Item>
             </Menu.Menu>
           </Menu>

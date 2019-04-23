@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Grid, Header, List, Segment } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 
 class Footer extends Component {
   render() {
@@ -12,28 +13,28 @@ class Footer extends Component {
           <Grid divided stackable>
             <Grid.Row>
               <Grid.Column width={3}>
-                <Header as="h4" content="About" />
-                <List link>
-                  <List.Item as="a">Sitemap</List.Item>
-                  <List.Item as="a">Contact Us</List.Item>
-                  <List.Item as="a">Religious Ceremonies</List.Item>
-                  <List.Item as="a">Gazebo Plans</List.Item>
-                </List>
-              </Grid.Column>
-              <Grid.Column width={3}>
                 <Header as="h4" content="Services" />
                 <List link>
-                  <List.Item as="a">Banana Pre-Order</List.Item>
-                  <List.Item as="a">DNA FAQ</List.Item>
-                  <List.Item as="a">How To Access</List.Item>
-                  <List.Item as="a">Favorite X-Men</List.Item>
+                  <List.Item>
+                    <Link to="/">Home</Link>
+                  </List.Item>
+                  <List.Item>
+                    <Link to="/movies">Movies</Link>
+                  </List.Item>
+                  <List.Item>
+                    <Link to="/restaurants">Restaurants</Link>
+                  </List.Item>
+                  <List.Item>
+                    <Link to="/login">Login</Link>
+                  </List.Item>
                 </List>
               </Grid.Column>
               <Grid.Column width={7}>
-                <Header as="h4">Footer Header</Header>
+                <Header as="h4">Zero Hour</Header>
                 <p>
-                  Extra space for a call to action inside the footer that could
-                  help re-engage users.
+                  Our mission is building a program that gives the option to
+                  explore both favorite and trending movies and restaurants at
+                  their own convenience.
                 </p>
               </Grid.Column>
             </Grid.Row>

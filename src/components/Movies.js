@@ -17,8 +17,9 @@ import {
   fetchPopularMovie,
   fetchUpcomingMovie,
   fetchTrendingMovie,
-  fetchTopRatedMovie
-} from '../actions';
+  fetchTopRatedMovie,
+  searchMovie
+} from '../actions/moviesActions';
 import MovieCard from '../containers/MovieCard';
 
 const MoviePageInfo = props => (
@@ -72,7 +73,12 @@ const MoviePagination = props => (
 );
 
 class Movies extends Component {
-  state = { activeItem: 'trending', activePage: 1 };
+  state = {
+    search: '',
+    searchDisabled: true,
+    activeItem: 'trending',
+    activePage: 1
+  };
 
   componentDidMount() {
     const { dispatch } = this.props;
@@ -89,6 +95,22 @@ class Movies extends Component {
   }
 
   handleItemClick = (e, { name }) => this.setState({ activeItem: name });
+
+  handleSearchChange = (e, { type }) => {
+    const { dispatch } = this.props;
+    this.setState({
+      search: e.target.value,
+      searchDisabled: false,
+      activeItem: 'results'
+    });
+
+    if (this.state.search && this.state.search.length > 1) {
+      if (this.state.search.length % 2 === 0) {
+        dispatch(searchMovie(this.state.search));
+      }
+    }
+    console.log('Movies - handleSearchChange: ', e.target.value);
+  };
 
   handlePaginationChange = (e, { activePage }) => {
     const { dispatch } = this.props;
@@ -115,6 +137,7 @@ class Movies extends Component {
   switchTabs(activeItem, result) {
     const { activePage } = this.state;
     const {
+      items,
       nowPlaying,
       popularMovie,
       topRatedMovie,
@@ -125,6 +148,7 @@ class Movies extends Component {
       page: 1,
       results: []
     };
+    const searchData = items === undefined ? movieObject : items;
     const nowPlayingData =
       nowPlaying.data === undefined ? movieObject : nowPlaying.data;
     const popularMovieData =
@@ -135,6 +159,9 @@ class Movies extends Component {
       trending.data === undefined ? movieObject : trending.data;
     const upcomingMovieData =
       upcomingMovie.data === undefined ? movieObject : upcomingMovie.data;
+
+    const searchResults = items.results === undefined ? [] : items.results;
+    console.log('Movies - Search: ', searchResults);
 
     switch (activeItem) {
       case 'trending':
@@ -202,6 +229,19 @@ class Movies extends Component {
             />
           </Grid>
         );
+      case 'results':
+        return (
+          <Grid centered>
+            <MoviePageInfo page={searchData.page} />
+            <MovieTotalResults results={searchData.total_results} />
+            <MovieCard movies={searchResults} />
+            <MoviePagination
+              activePage={activePage}
+              onPageChange={this.handlePaginationChange}
+              pages={searchData.total_pages}
+            />
+          </Grid>
+        );
       default:
         return (
           <Grid centered>
@@ -258,6 +298,12 @@ class Movies extends Component {
                   active={activeItem === 'upcoming'}
                   onClick={this.handleItemClick}
                 />
+                <Menu.Item
+                  name="results"
+                  disabled={this.state.searchDisabled}
+                  active={activeItem === 'results'}
+                  onClick={this.handleItemClick}
+                />
                 <Menu.Menu position="right">
                   <Menu.Item>
                     <Input
@@ -265,6 +311,8 @@ class Movies extends Component {
                       inverted
                       icon={{ name: 'search', link: true }}
                       placeholder="Search movies..."
+                      type={this.state.search}
+                      onChange={this.handleSearchChange}
                     />
                   </Menu.Item>
                 </Menu.Menu>
@@ -283,6 +331,7 @@ class Movies extends Component {
 function mapStateToProps(state) {
   const { fetchMovies } = state;
   const {
+    items,
     nowPlaying,
     popularMovie,
     topRatedMovie,
@@ -292,6 +341,7 @@ function mapStateToProps(state) {
   console.log('Movie - mapStateToProps: ', fetchMovies);
 
   return {
+    items,
     nowPlaying,
     popularMovie,
     topRatedMovie,

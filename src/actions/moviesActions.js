@@ -1,21 +1,23 @@
 import axios from 'axios';
 
-export const SELECT_MOVIE = 'SELECT_MOVIE';
-export const QUERY_MOVIES = 'QUERY_MOVIES';
-export const RECEIVE_MOVIES_QUERY = 'RECEIVE_MOVIES_QUERY';
-export const DISCOVER_MOVIES = 'DISCOVER_MOVIES';
-export const MOVIE_DETAIL = 'MOVIE_DETAIL';
-export const MOVIE_GENRES = 'MOVIE_GENRES';
-export const GET_MOVIE_REQUEST = 'GET_MOVIE_REQUEST';
-export const MOVIE_RECOMMENDATIONS = 'MOVIE_RECOMMENDATIONS';
-export const MOVIES_CASTS = 'MOVIES_CASTS';
-export const GET_IMDB_INFO = 'GET_IMDB_INFO';
-export const MOVIE_REVIEWS = 'MOVIE_REVIEWS';
-export const TRENDING_MOVIES = 'TRENDING_MOVIES';
-export const NOW_PLAYING_MOVIES = 'NOW_PLAYING_MOVIES';
-export const POPULAR_MOVIES = 'POPULAR_MOVIES';
-export const TOP_RATED_MOVIES = 'TOP_RATED_MOVIES';
-export const UPCOMING_MOVIES = 'UPCOMING_MOVIES';
+import {
+  SELECT_MOVIE,
+  QUERY_MOVIES,
+  GET_MOVIE_REQUEST,
+  MOVIE_DETAIL,
+  TRENDING_MOVIES,
+  NOW_PLAYING_MOVIES,
+  POPULAR_MOVIES,
+  TOP_RATED_MOVIES,
+  UPCOMING_MOVIES,
+  MOVIE_RECOMMENDATIONS,
+  MOVIES_CASTS,
+  RECEIVE_MOVIES_QUERY,
+  DISCOVER_MOVIES,
+  MOVIE_GENRES,
+  MOVIE_REVIEWS,
+  GET_IMDB_INFO
+} from './consts';
 
 export function selectMovie(movie) {
   return {
@@ -158,11 +160,11 @@ export function searchMovie(movie) {
     dispatch(queryMovie(movie));
     return axios
       .get(
-        `https://api.themoviedb.org/3/search/keyword?api_key=${
+        `https://api.themoviedb.org/3/search/movie?api_key=${
           process.env.REACT_APP_MOVIE_DB_API_KEY
-        }&query=${movie}&page=1`
+        }&language=en-US&&query=${movie}&page=1&include_adult=false&region=us`
       )
-      .then(response => response.data.results)
+      .then(response => response.data)
       .then(results => dispatch(receiveMovieQuery(movie, results)));
   };
 }
@@ -323,111 +325,5 @@ export function fetchUpcomingMovie(page) {
       .then(upcomingMovie =>
         dispatch(receiveUpcomingMovies(page, upcomingMovie))
       );
-  };
-}
-
-/** WEATHER */
-export const FETCH_LOCATION = 'FETCH_LOCATION';
-export const GEOPOSITION_SEARCH = 'GEOPOSITION_SEARCH';
-export const GET_LOCATION_KEY = 'GET_LOCATION_KEY';
-export const GET_TEMPERATURE = 'GET_TEMPERATURE';
-
-function fetchLocation(location) {
-  return {
-    type: FETCH_LOCATION,
-    location
-  };
-}
-
-function fetchLocationUsingGeolocation(latitude, longitude) {
-  return {
-    type: GEOPOSITION_SEARCH,
-    latitude,
-    longitude
-  };
-}
-
-function getLocationKey(location, result) {
-  return {
-    type: GET_LOCATION_KEY,
-    location,
-    result
-  };
-}
-
-function getTemperature(temperature) {
-  console.log('getTemperature: ', temperature);
-  return {
-    type: GET_TEMPERATURE,
-    temperature
-  };
-}
-
-export function fetchLocationKey(location) {
-  return dispatch => {
-    dispatch(fetchLocation(location));
-    return axios
-      .get(
-        `http://dataservice.accuweather.com/locations/v1/search?apikey=${
-          process.env.REACT_APP_WEATHER_API_KEY
-        }&q=${location}`
-      )
-      .then(response => response.data)
-      .then(result => dispatch(getLocationKey(location, result)));
-  };
-}
-
-// Fetch Weather Condition using Geolocation
-export function fetchWeatherConditionUsingGeoLocation(latitude, longitude) {
-  return dispatch => {
-    dispatch(fetchLocationUsingGeolocation(latitude, longitude));
-    return axios
-      .get(
-        `http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=${
-          process.env.REACT_APP_WEATHER_API_KEY
-        }&q=${latitude},${longitude}`
-      )
-      .then(response => {
-        return axios
-          .get(
-            `http://dataservice.accuweather.com/currentconditions/v1/${
-              response.data.Key
-            }?apikey=${process.env.REACT_APP_WEATHER_API_KEY}`
-          )
-          .then(response => {
-            console.log(
-              'fetchWeatherConditionUsingGeoLocation: ',
-              response.data[0]
-            );
-            return response.data[0].Temperature;
-          })
-          .then(temperature => dispatch(getTemperature(temperature)));
-      });
-  };
-}
-
-// Fetch Weather Condition using Location
-export function fetchWeatherConditionUsingLocation(location) {
-  return dispatch => {
-    dispatch(fetchLocation(location));
-    return axios
-      .get(
-        `http://dataservice.accuweather.com/locations/v1/search?apikey=${
-          process.env.REACT_APP_WEATHER_API_KEY
-        }&q=${location}`
-      )
-      .then(response => {
-        return dispatch => {
-          dispatch(fetchLocation(location));
-          return axios
-            .get(
-              `http://dataservice.accuweather.com/currentconditions/v1/${
-                response.data.Key
-              }apikey=${process.env.REACT_APP_WEATHER_API_KEY}`
-            )
-            .then(response => response.data.Temperature)
-            .then(temperature => dispatch(getTemperature(temperature)));
-        };
-      });
   };
 }
