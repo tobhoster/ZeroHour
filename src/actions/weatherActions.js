@@ -31,7 +31,6 @@ function getLocationKey(location, result) {
 }
 
 function getTemperature(temperature) {
-  console.log('getTemperature: ', temperature);
   return {
     type: GET_TEMPERATURE,
     temperature
@@ -70,10 +69,6 @@ export function fetchWeatherConditionUsingGeoLocation(latitude, longitude) {
             }?apikey=${process.env.REACT_APP_WEATHER_API_KEY}`
           )
           .then(response => {
-            console.log(
-              'fetchWeatherConditionUsingGeoLocation: ',
-              response.data[0]
-            );
             return response.data[0].Temperature;
           })
           .then(temperature => dispatch(getTemperature(temperature)));

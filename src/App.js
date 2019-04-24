@@ -12,6 +12,8 @@ import MovieDetails from './components/MovieDetails';
 import Movies from './components/Movies';
 import Restaurants from './components/Restaurants';
 import Login from './components/Login';
+import Favorites from './components/Favorites';
+import UpdateProfile from './components/UpdateProfile';
 
 const store = configureStore();
 
@@ -25,6 +27,8 @@ class App extends Component {
           <Route path="/movies" component={Movies} />
           <Route path="/restaurants" component={Restaurants} />
           <Route path="/login" component={Login} />
+          <Route path="/favorites" component={Favorites} />
+          <Route path="/profile" component={UpdateProfile} />
           {/* Handle Toast on Components */}
           <ReduxToastr
             timeOut={4000}

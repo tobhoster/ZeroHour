@@ -1,10 +1,18 @@
 import React, { Component } from 'react';
-import { Segment, Menu, Container, Image, Header } from 'semantic-ui-react';
+import {
+  Segment,
+  Menu,
+  Container,
+  Image,
+  Header,
+  Dropdown
+} from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import Logo from '../zero_hour.png';
 import Weather from '../weather.png';
 import { withRouter } from 'react-router-dom';
 import { fetchWeatherConditionUsingGeoLocation } from '../actions/weatherActions';
+import { loginState, logOutUser } from '../actions/sessionsActions';
 
 class ZeroHourMenu extends Component {
   constructor(props) {
@@ -14,7 +22,7 @@ class ZeroHourMenu extends Component {
   }
 
   componentDidMount() {
-    const { dispatch } = this.props;
+    const { dispatch, loggedIn } = this.props;
 
     navigator.geolocation.getCurrentPosition(
       position => {
@@ -27,11 +35,11 @@ class ZeroHourMenu extends Component {
           lat: position.coords.latitude,
           lng: position.coords.longitude
         });
-
-        console.log('componentWillMount: ', this.state);
       },
       err => console.log(err)
     );
+
+    dispatch(loginState()); // Get Login State
   }
 
   handleItemClick(e, { name }) {
@@ -56,12 +64,21 @@ class ZeroHourMenu extends Component {
     this.props.history.push(`/`);
   }
 
+  logOut() {
+    const { dispatch } = this.props;
+
+    dispatch(logOutUser());
+
+    this.openHomepage();
+  }
+
   render() {
     const { activeItem } = this.state;
-    const { temperature } = this.props;
+    const { temperature, loggedIn, user } = this.props;
     const { Imperial } = temperature;
     const temperatureValue = Imperial !== undefined ? Imperial.Value : NaN;
     const temperatureUnit = Imperial !== undefined ? Imperial.Unit : 'F';
+    const userData = user !== undefined ? user : {};
 
     return (
       <Container>
@@ -109,11 +126,25 @@ class ZeroHourMenu extends Component {
               />
 
               {/* Log Out */}
-              <Menu.Item
-                name="login"
-                active={activeItem === 'login'}
-                onClick={() => this.openLoginPage()}
-              />
+              {loggedIn ? (
+                <Menu.Menu position="right">
+                  <Dropdown item text={`Hello, ${userData.displayName}`}>
+                    <Dropdown.Menu>
+                      <Dropdown.Item>Favorites</Dropdown.Item>
+                      <Dropdown.Item>Update Profile</Dropdown.Item>
+                      <Dropdown.Item onClick={() => this.logOut()}>
+                        Log Out
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </Menu.Menu>
+              ) : (
+                <Menu.Item
+                  name="login"
+                  active={activeItem === 'login'}
+                  onClick={() => this.openLoginPage()}
+                />
+              )}
 
               {/* Weather */}
               <Menu.Item
@@ -149,10 +180,13 @@ class ZeroHourMenu extends Component {
 }
 
 function mapStateToProps(state) {
-  const { fetchWeather } = state;
+  const { fetchWeather, userProfile } = state;
+  const { loggedIn, user } = userProfile;
 
   return {
-    temperature: fetchWeather.temperature
+    temperature: fetchWeather.temperature,
+    loggedIn,
+    user
   };
 }
 

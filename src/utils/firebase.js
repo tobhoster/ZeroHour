@@ -1,4 +1,4 @@
-import app from 'firebase';
+import firebase from 'firebase';
 
 const config = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -9,19 +9,15 @@ const config = {
   messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID
 };
 
-const firestore = app.firestore();
+firebase.initializeApp(config);
 
-const settings = {
-  timestampsInSnapshots: true
-};
+const db = firebase.firestore();
 
-firestore.settings(settings);
+export const usersRef = db.collection('users');
+export const favoritesRef = db.collection('favorites');
 
-export const usersRef = firestore.collection('users');
-export const favoritesRef = firestore.collection('favorites');
+export const googleProvider = new firebase.auth.GoogleAuthProvider();
+export const facebookProvider = new firebase.auth.FacebookAuthProvider();
+export const twitterProvider = new firebase.auth.TwitterAuthProvider();
 
-export const googleProvider = new app.auth.GoogleAuthProvider();
-export const facebookProvider = new app.auth.FacebookAuthProvider();
-export const twitterProvider = new app.auth.TwitterAuthProvider();
-
-export default app;
+export default firebase;

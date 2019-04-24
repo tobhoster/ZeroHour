@@ -22,7 +22,7 @@ class CreateAccount extends Component {
           <Form>
             <Form.Field width={5}>
               <label>Username</label>
-              <input placeholder="Username" />
+              <input placeholder="Username" name="username" type="text" />
             </Form.Field>
             <Form.Field width={5}>
               <label>Email Address</label>

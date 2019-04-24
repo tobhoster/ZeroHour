@@ -10,11 +10,20 @@ import {
   Icon,
   Modal
 } from 'semantic-ui-react';
+import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import ZeroHourMenu from '../containers/ZeroHourMenu';
 import Footer from '../containers/Footer';
 import CreateAccount from '../containers/CreateAccount';
 import ForgotPassword from '../containers/ForgotPassword';
+import {
+  loginState,
+  loginUser,
+  loginGoogle,
+  loginFacebook,
+  loginTwitter,
+  logOutUser
+} from '../actions/sessionsActions';
 
 const buttonStyle = {
   marginTop: '1rem'
@@ -24,7 +33,9 @@ class Login extends Component {
   state = {
     activeItem: 'upcoming',
     createAnAccount: false,
-    iForgotPassword: false
+    iForgotPassword: false,
+    email: '',
+    password: ''
   };
 
   componentDidUpdate() {
@@ -49,8 +60,33 @@ class Login extends Component {
     this.setState({ iForgotPassword: false });
   };
 
+  handleChange = (e, { name, value }) => {
+    this.setState({ [name]: value });
+  };
+
+  handleEmailLogin = () => {
+    const { dispatch } = this.props;
+    const { email, password } = this.state;
+    console.log('handleSubmit: ', email);
+
+    dispatch(loginUser(email, password));
+    this.props.history.push(`/`);
+  };
+
+  handleGoogleLogin = () => {
+    const { dispatch } = this.props;
+
+    dispatch(loginGoogle());
+    this.props.history.push(`/`);
+  };
+
   render() {
-    const { activeItem, createAnAccount, iForgotPassword } = this.state;
+    const {
+      activeItem,
+      createAnAccount,
+      iForgotPassword,
+      loggedIn
+    } = this.state;
 
     return (
       <div>
@@ -61,12 +97,11 @@ class Login extends Component {
           }}
         >
           <Grid.Row>
-            <ZeroHourMenu name="login" />
+            <ZeroHourMenu name={loggedIn ? 'logout' : 'login'} />
           </Grid.Row>
           <Grid.Column width={6}>
             <Form
               size="large"
-              onSubmit={this.handleSubmit}
               widths="equal"
               style={{
                 marginTop: '7.5rem',
@@ -93,6 +128,7 @@ class Login extends Component {
                   placeholder="Email"
                   icon="user"
                   iconPosition="left"
+                  onChange={this.handleChange}
                 />
                 <Form.Input
                   // onChange={(e, data) => this.setState({ password: data.value })}
@@ -101,8 +137,9 @@ class Login extends Component {
                   placeholder="Password"
                   icon="lock"
                   iconPosition="left"
+                  onChange={this.handleChange}
                 />
-                <Button type="submit" fluid>
+                <Button type="submit" fluid onClick={this.handleEmailLogin}>
                   Login
                 </Button>
                 <Button color="facebook" fluid style={buttonStyle}>
@@ -111,7 +148,12 @@ class Login extends Component {
                 <Button color="twitter" fluid style={buttonStyle}>
                   <Icon name="twitter" /> Sign in with Twitter
                 </Button>
-                <Button color="google plus" fluid style={buttonStyle}>
+                <Button
+                  color="google plus"
+                  fluid
+                  style={buttonStyle}
+                  onClick={this.handleGoogleLogin}
+                >
                   <Icon name="google" /> Sign in with Google
                 </Button>
                 <Header
@@ -156,4 +198,14 @@ class Login extends Component {
   }
 }
 
-export default withRouter(Login);
+function mapStateToProps(state) {
+  const { userProfile } = state;
+  const { loggedIn } = userProfile;
+
+  return {
+    userProfile,
+    loggedIn
+  };
+}
+
+export default withRouter(connect(mapStateToProps)(Login));

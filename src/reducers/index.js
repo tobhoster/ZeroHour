@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { toastrReducer } from 'react-redux-toastr';
+import { reducer as toastrReducer } from 'react-redux-toastr';
 import selectedMovie from './selectedMovieReducer';
 import fetchMovies from './fetchMoviesReducer';
 import discovery from './discoveryReducer';
@@ -12,6 +12,6 @@ const rootReducer = combineReducers({
   fetchMovies,
   discovery,
   fetchWeather,
-  toastrReducer
+  toastr: toastrReducer
 });
 export default rootReducer;

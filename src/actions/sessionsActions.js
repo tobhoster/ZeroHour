@@ -1,4 +1,4 @@
-import app, {
+import firebase, {
   usersRef,
   googleProvider,
   facebookProvider,
@@ -22,19 +22,24 @@ function letLogOut(state) {
   };
 }
 
-function getUserState(user, state) {
+function getUserState(user, loggedIn) {
   return {
     type: LOGIN_STATE,
     user,
-    state
+    loggedIn
   };
 }
 
 export const loginState = () => dispatch => {
   try {
-    app.auth().onAuthStateChanged(user => {
+    firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        dispatch(getUserState(user, true));
+        const userData = {
+          displayName: user.displayName,
+          email: user.email,
+          uid: user.uid
+        };
+        dispatch(getUserState(userData, true));
       } else {
         dispatch(getUserState(user, false));
       }
@@ -46,19 +51,28 @@ export const loginState = () => dispatch => {
 
 export const loginUser = (email, password) => dispatch => {
   try {
-    app
+    firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
       .then(authUser => {
         return usersRef
           .doc(authUser.user.uid)
           .get()
-          .then(user => {
-            dispatch(getUser(authUser, user.data));
+          .then(userData => {
+            if (userData.exists) {
+              dispatch(getUser(authUser, userData.data));
+            } else {
+              usersRef.doc(authUser.user.uid).set({
+                displayName: authUser.user.displayName,
+                email: authUser.user.email,
+                uid: authUser.user.uid,
+                createdAt: Date.now()
+              });
+            }
           });
       })
       .catch(err => {
-        toastr.error(err);
+        alert(err);
       });
   } catch (error) {
     toastr.error(error);
@@ -68,18 +82,27 @@ export const loginUser = (email, password) => dispatch => {
 export function loginGoogle() {
   return dispatch => {
     try {
-      return app
+      return firebase
         .auth()
         .signInWithPopup(googleProvider)
         .then(result => {
           var token = result.credential.providerId;
           var user = result.user;
 
-          return result
+          return usersRef
             .doc(user.uid)
             .get()
             .then(userData => {
-              dispatch(getUser(result, userData.data));
+              if (userData.exists) {
+                dispatch(getUser(result, userData.data));
+              } else {
+                usersRef.doc(user.uid).set({
+                  displayName: user.displayName,
+                  email: user.email,
+                  uid: user.uid,
+                  createdAt: Date.now()
+                });
+              }
             });
         });
     } catch (error) {
@@ -99,18 +122,27 @@ export function loginGoogle() {
 export function loginFacebook() {
   return dispatch => {
     try {
-      return app
+      return firebase
         .auth()
         .signInWithPopup(facebookProvider)
         .then(result => {
           var token = result.credential.providerId;
           var user = result.user;
 
-          return result
+          return usersRef
             .doc(user.uid)
             .get()
             .then(userData => {
-              dispatch(getUser(result, userData.data));
+              if (userData.exists) {
+                dispatch(getUser(result, userData.data));
+              } else {
+                usersRef.doc(user.uid).set({
+                  displayName: user.displayName,
+                  email: user.email,
+                  uid: user.uid,
+                  createdAt: Date.now()
+                });
+              }
             });
         });
     } catch (error) {
@@ -130,18 +162,27 @@ export function loginFacebook() {
 export function loginTwitter() {
   return dispatch => {
     try {
-      return app
+      return firebase
         .auth()
         .signInWithPopup(twitterProvider)
         .then(result => {
           var token = result.credential.providerId;
           var user = result.user;
 
-          return result
+          return usersRef
             .doc(user.uid)
             .get()
             .then(userData => {
-              dispatch(getUser(result, userData.data));
+              if (userData.exists) {
+                dispatch(getUser(result, userData.data));
+              } else {
+                usersRef.doc(user.uid).set({
+                  displayName: user.displayName,
+                  email: user.email,
+                  uid: user.uid,
+                  createdAt: Date.now()
+                });
+              }
             });
         });
     } catch (error) {
@@ -161,7 +202,7 @@ export function loginTwitter() {
 export function logOutUser() {
   return dispatch => {
     try {
-      return app
+      return firebase
         .auth()
         .signOut()
         .then(() => {

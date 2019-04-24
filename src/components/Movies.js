@@ -161,7 +161,6 @@ class Movies extends Component {
       upcomingMovie.data === undefined ? movieObject : upcomingMovie.data;
 
     const searchResults = items.results === undefined ? [] : items.results;
-    console.log('Movies - Search: ', searchResults);
 
     switch (activeItem) {
       case 'trending':
@@ -338,7 +337,6 @@ function mapStateToProps(state) {
     trending,
     upcomingMovie
   } = fetchMovies;
-  console.log('Movie - mapStateToProps: ', fetchMovies);
 
   return {
     items,

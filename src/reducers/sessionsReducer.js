@@ -1,13 +1,13 @@
-import { USER_LOGIN, USER_LOGOUT, LOGIN_STATE } from './consts';
+import { USER_LOGIN, USER_LOGOUT, LOGIN_STATE } from '../actions/consts';
 
 export default function userProfile(
   state = {
     isFetching: false,
     didInvalidate: false,
     user: {},
-    state: {},
     auth: {},
     data: {},
+    loggedIn: false,
     status: false
   },
   action
@@ -17,7 +17,7 @@ export default function userProfile(
       return Object.assign({}, state, {
         isFetching: false,
         user: action.user,
-        state: action.state
+        loggedIn: action.loggedIn
       });
     case USER_LOGIN:
       console.log('USER_LOGIN: ', action);
