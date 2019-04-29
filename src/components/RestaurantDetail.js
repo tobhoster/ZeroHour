@@ -46,7 +46,6 @@ class RestaurantDetail extends Component {
     const { dispatch, match } = this.props;
     const { params } = match;
 
-    console.log('RestaurantDetail - match: ', match);
     dispatch(getResturantDetails(params.restaurantId));
     dispatch(getResturantReviews(params.restaurantId));
     dispatch(getFavorite(params.restaurantId));
@@ -76,7 +75,6 @@ class RestaurantDetail extends Component {
     const images = detailsData.photos === undefined ? [] : detailsData.photos;
     // const hours = details.hours === undefined ? [] : details.hours[0].open;
     // const reviewsData = reviews === undefined ? [] : reviews;
-    console.log('detailsData: ', detailsData);
 
     if (favorite.updated) {
       window.location.reload();
@@ -322,7 +320,6 @@ function mapStateToProps(state) {
   const { loggedIn } = userProfile;
   const { details, reviews } = fetchRestaurants;
 
-  console.log('Resturants - mapStateToProps - ', fetchRestaurants);
   return {
     loggedIn,
     details,

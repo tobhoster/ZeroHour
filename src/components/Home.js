@@ -32,11 +32,9 @@ class Home extends Component {
     const { dispatch } = this.props;
     dispatch(fetchDiscoverMovie());
     dispatch(getMovieGenre());
-
-    console.log('Props: ', this.props);
   }
 
-  openMovieDetails(title) {
+  openMovieDetailsHeader(title) {
     this.props.history.push(`/${title}/details`);
   }
 
@@ -65,7 +63,7 @@ class Home extends Component {
               backgroundRepeat: 'no-repeat',
               backgroundPosition: 'center'
             }}
-            onClick={() => this.openMovieDetails(first.id)}
+            onClick={() => this.openMovieDetailsHeader(first.id)}
           >
             <Image
               src={`https://image.tmdb.org/t/p/original/${first.poster_path}`}
@@ -124,7 +122,6 @@ class Home extends Component {
 
 function mapStateToProps(state) {
   const { selectedMovie, discovery } = state;
-  console.log('mapStateToProps: ', state);
   return {
     selectedMovie,
     movies: discovery.movies,

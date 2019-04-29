@@ -20,7 +20,6 @@ export default function userProfile(
         loggedIn: action.loggedIn
       });
     case USER_LOGIN:
-      console.log('USER_LOGIN: ', action);
       return Object.assign({}, state, {
         isFetching: false,
         didInvalidate: false,

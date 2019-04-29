@@ -11,9 +11,6 @@ const defaultTextColor = {
 
 class MovieRecommendations extends Component {
   openMovieDetails(title) {
-    console.log(`MovieRecommendations - Event: `, title);
-    console.log(`MovieRecommendations - History: `, this.props.history);
-
     this.props.history.push(`/${title}/details`);
   }
 

@@ -53,7 +53,6 @@ class Login extends Component {
   handleEmailLogin = () => {
     const { dispatch } = this.props;
     const { email, password } = this.state;
-    console.log('handleSubmit: ', email);
 
     //eslint-disable-next-line
     const pattern = /[a-zA-Z0-9]+[\.]?([a-zA-Z0-9]+)?[\@][a-z]{3,9}[\.][a-z]{2,5}/g;
@@ -91,8 +90,6 @@ class Login extends Component {
   render() {
     const { createAnAccount, iForgotPassword } = this.state;
     const { loggedIn } = this.props;
-
-    console.log('Login: ', loggedIn);
 
     return (
       <div>

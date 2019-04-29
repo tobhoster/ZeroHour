@@ -5,8 +5,6 @@ import { withRouter } from 'react-router-dom';
 
 class MovieCard extends Component {
   openMovieDetails(title) {
-    console.log(`openMovieDetails - Event: `, title);
-
     this.props.history.push(`/${title}/details`);
   }
 

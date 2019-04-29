@@ -45,6 +45,7 @@ class Footer extends Component {
                     )}
                   </List.Item>
                 </List>
+                <p>&#169; {new Date().getFullYear()} Zero Hour </p>
               </Grid.Column>
               <Grid.Column width={7}>
                 <Header as="h4">Zero Hour</Header>
@@ -53,6 +54,8 @@ class Footer extends Component {
                   explore both favorite and trending movies and restaurants at
                   their own convenience.
                 </p>
+
+                <span>Created by Oluwatobi Adebiyi | Efosa Uwa-Omede</span>
               </Grid.Column>
             </Grid.Row>
           </Grid>

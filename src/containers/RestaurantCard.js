@@ -12,8 +12,6 @@ import { withRouter } from 'react-router-dom';
 
 class RestaurantCard extends Component {
   openRestaurantDetails(title) {
-    console.log(`openRestaurantDetails - Event: `, title);
-
     this.props.history.push(`/restaurant/${title}/details`);
   }
 

@@ -27,7 +27,6 @@ export default function discovery(
         isFetching: true
       });
     case DISCOVER_MOVIES:
-      console.log('DISCOVER_MOVIES: ', action);
       return Object.assign({}, state, {
         isFetching: false,
         didInvalidate: false,

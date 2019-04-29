@@ -39,7 +39,6 @@ class Restaurants extends Component {
         );
       }
     }
-    console.log('Movies - handleSearchChange: ', e.target.value);
   };
 
   switchTabs(activeItem, result) {
@@ -71,7 +70,7 @@ class Restaurants extends Component {
           lng: position.coords.longitude
         });
       },
-      err => console.log(err)
+      err => console.log(err) // TODO: Check it out
     );
   }
 

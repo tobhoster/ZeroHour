@@ -15,7 +15,6 @@ class CreateAccount extends Component {
   createAccount = () => {
     const { dispatch } = this.props;
     const { username, email, password } = this.state;
-    console.log('handleSubmit: ', email);
 
     //eslint-disable-next-line
     const pattern = /[a-zA-Z0-9]+[\.]?([a-zA-Z0-9]+)?[\@][a-z]{3,9}[\.][a-z]{2,5}/g;

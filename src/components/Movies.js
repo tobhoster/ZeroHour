@@ -109,7 +109,6 @@ class Movies extends Component {
         dispatch(searchMovie(this.state.search));
       }
     }
-    console.log('Movies - handleSearchChange: ', e.target.value);
   };
 
   handlePaginationChange = (e, { activePage }) => {
