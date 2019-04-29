@@ -1,28 +1,25 @@
 import React, { Component } from 'react';
 import { Grid } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { withRouter, Redirect } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import ZeroHourMenu from '../containers/ZeroHourMenu';
 import Footer from '../containers/Footer';
+import { loginState } from '../actions/sessionsActions';
 
 class Favorites extends Component {
   state = { activeItem: 'upcoming' };
 
   componentDidMount() {
-    const { dispatch } = this.props;
+    const { dispatch, history } = this.props;
 
-    dispatch();
+    dispatch(loginState(history));
   }
 
   handleItemClick = (e, { name }) => this.setState({ activeItem: name });
 
   render() {
-    const { activeItem, loggedIn } = this.state;
-
-    if (!loggedIn) {
-      console.log('');
-      return <Redirect to="/login" />;
-    }
+    // const { activeItem } = this.state;
+    // const { loggedIn } = this.props;
 
     return (
       <div>

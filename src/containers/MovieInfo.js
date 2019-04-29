@@ -8,11 +8,12 @@ import {
   Grid,
   Statistic,
   List,
-  Image
+  Image,
+  Button
 } from 'semantic-ui-react';
-import imdb from '../imdb.jpg';
-import metacritic from '../metacritic.png';
-import rottenTomatoes from '../RottenTomatoes.png';
+import imdb from '../img/imdb.jpg';
+import metacritic from '../img/metacritic.png';
+import rottenTomatoes from '../img/RottenTomatoes.png';
 
 const defaultTextColor = {
   color: 'white',
@@ -21,7 +22,7 @@ const defaultTextColor = {
 
 class MovieInfo extends Component {
   render() {
-    const { info } = this.props;
+    const { info, favorite, onClick } = this.props;
 
     const movieRatings = info.Ratings === undefined ? [] : info.Ratings;
     const images = [imdb, rottenTomatoes, metacritic];
@@ -32,10 +33,20 @@ class MovieInfo extends Component {
           marginTop: '2rem'
         }}
       >
+        {favorite.status ? (
+          <Button inverted floated="right" size="medium" onClick={onClick}>
+            <Icon circular name="favorite" /> Added
+          </Button>
+        ) : (
+          <Button inverted floated="right" size="medium" onClick={onClick}>
+            <Icon circular name="add" /> Add to Favorites
+          </Button>
+        )}
         <Header as="h2" dividing style={defaultTextColor}>
           <Icon name="folder outline" size="tiny" style={defaultTextColor} />{' '}
           Overview
         </Header>
+
         <Grid>
           <Grid.Column floated="left" width={12}>
             <Segment

@@ -49,6 +49,37 @@ export const loginState = () => dispatch => {
   }
 };
 
+export const createUser = (username, email, password) => dispatch => {
+  try {
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then(authUser => {
+        return usersRef
+          .doc(authUser.user.uid)
+          .set({
+            displayName: username,
+            email: authUser.user.email,
+            uid: authUser.user.uid,
+            createdAt: Date.now()
+          })
+          .then(() => {
+            return firebase.auth().currentUser.updateProfile({
+              displayName: username
+            });
+          })
+          .then(() => {
+            return loginUser(email, password);
+          });
+      })
+      .catch(err => {
+        alert(err);
+      });
+  } catch (error) {
+    toastr.error(error);
+  }
+};
+
 export const loginUser = (email, password) => dispatch => {
   try {
     firebase
@@ -86,7 +117,7 @@ export function loginGoogle() {
         .auth()
         .signInWithPopup(googleProvider)
         .then(result => {
-          var token = result.credential.providerId;
+          // var token = result.credential.providerId;
           var user = result.user;
 
           return usersRef
@@ -126,7 +157,7 @@ export function loginFacebook() {
         .auth()
         .signInWithPopup(facebookProvider)
         .then(result => {
-          var token = result.credential.providerId;
+          // var token = result.credential.providerId;
           var user = result.user;
 
           return usersRef
@@ -166,7 +197,7 @@ export function loginTwitter() {
         .auth()
         .signInWithPopup(twitterProvider)
         .then(result => {
-          var token = result.credential.providerId;
+          // var token = result.credential.providerId;
           var user = result.user;
 
           return usersRef

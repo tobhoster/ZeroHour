@@ -10,7 +10,7 @@ class UpdateProfile extends Component {
   handleItemClick = (e, { name }) => this.setState({ activeItem: name });
 
   render() {
-    const { activeItem } = this.state;
+    // const { activeItem, loggedIn } = this.state;
 
     return (
       <div>

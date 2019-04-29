@@ -51,8 +51,10 @@ class Home extends Component {
       <div>
         <Grid>
           <Grid.Row>
+            {/* Menu - Header */}
             <ZeroHourMenu name="home" />
           </Grid.Row>
+          {/* Header with the big image and title */}
           <Grid.Row
             verticalAlign="bottom"
             style={{
@@ -113,6 +115,7 @@ class Home extends Component {
           {/* Movies Card */}
           <MovieCard movies={movies} />
         </Grid>
+        {/* Footer */}
         <Footer />
       </div>
     );

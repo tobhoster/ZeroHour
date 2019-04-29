@@ -14,6 +14,8 @@ import Restaurants from './components/Restaurants';
 import Login from './components/Login';
 import Favorites from './components/Favorites';
 import UpdateProfile from './components/UpdateProfile';
+import { requireAuthenication } from './utils/requireAuthenication';
+import RestaurantDetail from './components/RestaurantDetail';
 
 const store = configureStore();
 
@@ -26,9 +28,19 @@ class App extends Component {
           <Route path="/:movieId/details" component={MovieDetails} />
           <Route path="/movies" component={Movies} />
           <Route path="/restaurants" component={Restaurants} />
+          <Route
+            path="/restaurant/:restaurantId/details"
+            component={RestaurantDetail}
+          />
           <Route path="/login" component={Login} />
-          <Route path="/favorites" component={Favorites} />
-          <Route path="/profile" component={UpdateProfile} />
+          <Route
+            path="/favorites"
+            component={requireAuthenication(Favorites)}
+          />
+          <Route
+            path="/profile"
+            component={requireAuthenication(UpdateProfile)}
+          />
           {/* Handle Toast on Components */}
           <ReduxToastr
             timeOut={4000}

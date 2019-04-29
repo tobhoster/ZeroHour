@@ -8,8 +8,8 @@ import {
   Dropdown
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import Logo from '../zero_hour.png';
-import Weather from '../weather.png';
+import Logo from '../img/zero_hour.png';
+import Weather from '../img/weather.png';
 import { withRouter } from 'react-router-dom';
 import { fetchWeatherConditionUsingGeoLocation } from '../actions/weatherActions';
 import { loginState, logOutUser } from '../actions/sessionsActions';
@@ -22,7 +22,7 @@ class ZeroHourMenu extends Component {
   }
 
   componentDidMount() {
-    const { dispatch, loggedIn } = this.props;
+    const { dispatch } = this.props;
 
     navigator.geolocation.getCurrentPosition(
       position => {
@@ -64,6 +64,14 @@ class ZeroHourMenu extends Component {
     this.props.history.push(`/`);
   }
 
+  favorites() {
+    this.props.history.push(`/favorites`);
+  }
+
+  updateProfile() {
+    this.props.history.push(`/profile`);
+  }
+
   logOut() {
     const { dispatch } = this.props;
 
@@ -92,6 +100,7 @@ class ZeroHourMenu extends Component {
             }}
           >
             <Menu.Item
+              link
               header
               onClick={() => this.openHomepage()}
               style={{
@@ -112,6 +121,7 @@ class ZeroHourMenu extends Component {
             <Menu.Menu position="right">
               {/* Movies */}
               <Menu.Item
+                link
                 name="movies"
                 position="right"
                 active={activeItem === 'movies'}
@@ -120,6 +130,7 @@ class ZeroHourMenu extends Component {
 
               {/* Resturants */}
               <Menu.Item
+                link
                 name="restaurants"
                 active={activeItem === 'restaurants'}
                 onClick={() => this.openRestaurants()}
@@ -130,8 +141,12 @@ class ZeroHourMenu extends Component {
                 <Menu.Menu position="right">
                   <Dropdown item text={`Hello, ${userData.displayName}`}>
                     <Dropdown.Menu>
-                      <Dropdown.Item>Favorites</Dropdown.Item>
-                      <Dropdown.Item>Update Profile</Dropdown.Item>
+                      <Dropdown.Item onClick={() => this.favorites()}>
+                        Favorites
+                      </Dropdown.Item>
+                      <Dropdown.Item onClick={() => this.updateProfile()}>
+                        Update Profile
+                      </Dropdown.Item>
                       <Dropdown.Item onClick={() => this.logOut()}>
                         Log Out
                       </Dropdown.Item>
@@ -140,6 +155,7 @@ class ZeroHourMenu extends Component {
                 </Menu.Menu>
               ) : (
                 <Menu.Item
+                  link
                   name="login"
                   active={activeItem === 'login'}
                   onClick={() => this.openLoginPage()}

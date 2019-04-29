@@ -42,7 +42,7 @@ export function fetchLocationKey(location) {
     dispatch(fetchLocation(location));
     return axios
       .get(
-        `http://dataservice.accuweather.com/locations/v1/search?apikey=${
+        `https://cors-anywhere.herokuapp.com/http://dataservice.accuweather.com/locations/v1/search?apikey=${
           process.env.REACT_APP_WEATHER_API_KEY
         }&q=${location}`
       )
@@ -57,7 +57,7 @@ export function fetchWeatherConditionUsingGeoLocation(latitude, longitude) {
     dispatch(fetchLocationUsingGeolocation(latitude, longitude));
     return axios
       .get(
-        `http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=${
+        `https://cors-anywhere.herokuapp.com/http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=${
           process.env.REACT_APP_WEATHER_API_KEY
         }&q=${latitude},${longitude}`
       )

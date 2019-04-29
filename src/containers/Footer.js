@@ -1,9 +1,20 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Container, Grid, Header, List, Segment } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
+import { logOutUser } from '../actions/sessionsActions';
 
 class Footer extends Component {
+  logOut(history) {
+    const { dispatch } = this.props;
+
+    dispatch(logOutUser());
+    history.push(`/`);
+  }
+
   render() {
+    const { loggedIn } = this.props;
+
     return (
       <Segment
         vertical
@@ -25,7 +36,13 @@ class Footer extends Component {
                     <Link to="/restaurants">Restaurants</Link>
                   </List.Item>
                   <List.Item>
-                    <Link to="/login">Login</Link>
+                    {loggedIn ? (
+                      <p onClick={() => this.logOut(this.props.history)}>
+                        Log Out
+                      </p>
+                    ) : (
+                      <Link to="/login">Login</Link>
+                    )}
                   </List.Item>
                 </List>
               </Grid.Column>
@@ -45,4 +62,14 @@ class Footer extends Component {
   }
 }
 
-export default Footer;
+function mapStateToProps(state) {
+  const { userProfile } = state;
+  const { loggedIn, user } = userProfile;
+
+  return {
+    loggedIn,
+    user
+  };
+}
+
+export default connect(mapStateToProps)(Footer);

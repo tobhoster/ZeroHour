@@ -21,7 +21,6 @@ import {
 import PropTypes from 'prop-types';
 import currencyFormatter from 'currency-formatter';
 import { withRouter } from 'react-router-dom';
-
 import ZeroHourMenu from '../containers/ZeroHourMenu';
 import MovieInfo from '../containers/MovieInfo';
 import CarouselMovieCredits from '../containers/CarouselMovieCredits';
@@ -29,6 +28,11 @@ import CarouselImages from '../containers/CarouselImages';
 import CarouselVideos from '../containers/CarouselVideos';
 import Reviews from '../containers/Reviews';
 import MovieRecommendations from '../containers/MovieRecommendations';
+import {
+  getFavorite,
+  addFavorite,
+  deleteFavorite
+} from '../actions/favoritesActions';
 import Footer from '../containers/Footer';
 
 const defaultTextColor = {
@@ -128,20 +132,35 @@ class MovieDetails extends Component {
   }
 
   componentDidMount() {
-    const { dispatch, match, detail } = this.props;
+    const { dispatch, match } = this.props;
     const { params } = match;
-    console.log('MovieDetails - match: ', match);
-    console.log('MovieDetails - detail: ', detail);
 
     dispatch(queryForDetails(params.movieId));
     dispatch(getRecommendationMovie(params.movieId));
     dispatch(getMovieCredits(params.movieId));
     dispatch(getIMDBMovieInfo(params.movieId));
     dispatch(getMovieReviews(params.movieId));
+    dispatch(getFavorite(params.movieId));
+  }
+
+  favorites(favorite) {
+    const { dispatch, match } = this.props;
+    const { params } = match;
+
+    favorite.status
+      ? dispatch(deleteFavorite(params.movieId))
+      : dispatch(addFavorite(params.movieId, 'movie', this.props.history));
   }
 
   render() {
-    const { detail, recommendations, credits, imdb, reviews } = this.props;
+    const {
+      detail,
+      recommendations,
+      credits,
+      imdb,
+      reviews,
+      favorite
+    } = this.props;
     const genres = detail.genres === undefined ? [] : detail.genres;
     const videos = detail.videos === undefined ? [] : detail.videos.results;
     const images = detail.images === undefined ? [] : detail.images.backdrops;
@@ -152,6 +171,10 @@ class MovieDetails extends Component {
     const movieImdb = imdb === undefined ? {} : imdb;
     const max = images.length;
 
+    if (favorite.updated) {
+      window.location.reload();
+    }
+
     return (
       <div>
         <Grid
@@ -160,13 +183,18 @@ class MovieDetails extends Component {
           }}
         >
           <Grid.Row>
-            <ZeroHourMenu name="home" />
+            <ZeroHourMenu name="movies" />
           </Grid.Row>
           <MovieDetailsHeader detail={detail} genres={genres} />
           <Grid.Row />
         </Grid>
         {/* Overview */}
-        <MovieInfo info={movieImdb} />
+        <MovieInfo
+          info={movieImdb}
+          detail={detail}
+          favorite={favorite}
+          onClick={() => this.favorites(favorite)}
+        />
         {/* Cast */}
         <CarouselMovieCredits
           credits={casts}
@@ -196,7 +224,8 @@ MovieDetails.propTypes = {
   detail: PropTypes.object,
   recommendations: PropTypes.array,
   credits: PropTypes.object,
-  imdb: PropTypes.object
+  imdb: PropTypes.object,
+  reviews: PropTypes.array
 };
 
 MovieDetailsHeader.propTypes = {
@@ -209,16 +238,16 @@ MovieDetailsStatistics.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const { discovery } = state;
+  const { discovery, favorite } = state;
   const { detail, recommendations, credits, imdb, reviews } = discovery;
-  console.log('MovieDetails - mapStateToProps: ', detail);
 
   return {
     detail,
     recommendations,
     credits,
     imdb,
-    reviews
+    reviews,
+    favorite
   };
 }
 
