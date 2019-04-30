@@ -143,13 +143,15 @@ class MovieDetails extends Component {
     dispatch(getFavorite(params.movieId));
   }
 
-  favorites(favorite) {
+  favorites(favorite, detail) {
     const { dispatch, match } = this.props;
     const { params } = match;
 
     favorite.status
       ? dispatch(deleteFavorite(params.movieId))
-      : dispatch(addFavorite(params.movieId, 'movie', this.props.history));
+      : dispatch(
+          addFavorite(params.movieId, detail, 'movie', this.props.history)
+        );
   }
 
   render() {
@@ -193,7 +195,7 @@ class MovieDetails extends Component {
           info={movieImdb}
           detail={detail}
           favorite={favorite}
-          onClick={() => this.favorites(favorite)}
+          onClick={() => this.favorites(favorite, detail)}
         />
         {/* Cast */}
         <CarouselMovieCredits
