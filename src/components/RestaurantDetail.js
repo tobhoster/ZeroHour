@@ -36,9 +36,15 @@ const defaultTextColor = {
 class RestaurantDetail extends Component {
   componentDidUpdate(prevProps) {
     ReactDOM.findDOMNode(this).scrollIntoView();
+    // Location
     if (this.props.location !== prevProps.location) {
       window.scrollTo(0, 0);
       window.location.reload();
+    }
+
+    // LoggedIn
+    if (this.props.loggedIn !== prevProps.loggedIn) {
+      this.props.dispatch(getFavorite(this.props.text));
     }
   }
 
@@ -51,14 +57,14 @@ class RestaurantDetail extends Component {
     dispatch(getFavorite(params.restaurantId));
   }
 
-  toggleFavorite(favorite) {
-    const { dispatch, match } = this.props;
+  toggleFavorite(favorite, detail) {
+    const { dispatch, match, history } = this.props;
     const { params } = match;
 
     favorite.status
-      ? dispatch(deleteFavorite(params.restaurantId))
+      ? dispatch(deleteFavorite(params.restaurantId, history))
       : dispatch(
-          addFavorite(params.restaurantId, 'restaurant', this.props.history)
+          addFavorite(params.restaurantId, detail, 'restaurant', history)
         );
   }
 
@@ -105,7 +111,7 @@ class RestaurantDetail extends Component {
               inverted
               floated="right"
               size="medium"
-              onClick={() => this.toggleFavorite(favorite)}
+              onClick={() => this.toggleFavorite(favorite, detailsData)}
             >
               <Icon circular name="favorite" /> Added
             </Button>
@@ -114,7 +120,7 @@ class RestaurantDetail extends Component {
               inverted
               floated="right"
               size="medium"
-              onClick={() => this.toggleFavorite(favorite)}
+              onClick={() => this.toggleFavorite(favorite, detailsData)}
             >
               <Icon circular name="add" /> Add to Favorite
             </Button>
@@ -316,7 +322,7 @@ class RestaurantDetail extends Component {
 }
 
 function mapStateToProps(state) {
-  const { userProfile, fetchRestaurants, favorite } = state;
+  const { userProfile, fetchRestaurants, favorite, text } = state;
   const { loggedIn } = userProfile;
   const { details, reviews } = fetchRestaurants;
 
@@ -324,7 +330,8 @@ function mapStateToProps(state) {
     loggedIn,
     details,
     reviews,
-    favorite
+    favorite,
+    text
   };
 }
 

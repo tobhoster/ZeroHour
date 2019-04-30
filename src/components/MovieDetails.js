@@ -125,9 +125,15 @@ const MovieDetailsHeader = props => (
 class MovieDetails extends Component {
   componentDidUpdate(prevProps) {
     ReactDOM.findDOMNode(this).scrollIntoView();
+    // Location
     if (this.props.location !== prevProps.location) {
       window.scrollTo(0, 0);
       window.location.reload();
+    }
+
+    // LoggedIn
+    if (this.props.loggedIn !== prevProps.loggedIn) {
+      this.props.dispatch(getFavorite(this.props.detail.id));
     }
   }
 
@@ -144,14 +150,12 @@ class MovieDetails extends Component {
   }
 
   favorites(favorite, detail) {
-    const { dispatch, match } = this.props;
+    const { dispatch, match, history } = this.props;
     const { params } = match;
 
     favorite.status
-      ? dispatch(deleteFavorite(params.movieId))
-      : dispatch(
-          addFavorite(params.movieId, detail, 'movie', this.props.history)
-        );
+      ? dispatch(deleteFavorite(params.movieId, history))
+      : dispatch(addFavorite(params.movieId, detail, 'movie', history));
   }
 
   render() {
@@ -227,7 +231,8 @@ MovieDetails.propTypes = {
   recommendations: PropTypes.array,
   credits: PropTypes.object,
   imdb: PropTypes.object,
-  reviews: PropTypes.array
+  reviews: PropTypes.array,
+  favorite: PropTypes.object
 };
 
 MovieDetailsHeader.propTypes = {
@@ -240,8 +245,9 @@ MovieDetailsStatistics.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const { discovery, favorite } = state;
+  const { discovery, favorite, userProfile } = state;
   const { detail, recommendations, credits, imdb, reviews } = discovery;
+  const { loggedIn } = userProfile;
 
   return {
     detail,
@@ -249,7 +255,8 @@ function mapStateToProps(state) {
     credits,
     imdb,
     reviews,
-    favorite
+    favorite,
+    loggedIn
   };
 }
 

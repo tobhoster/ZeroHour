@@ -1,4 +1,4 @@
-import firebase, { favoritesRef } from '../utils/firebase';
+import firebase, { usersRef } from '../utils/firebase';
 import {
   ADD_FAVORITE,
   REMOVE_FAVORITE,
@@ -32,8 +32,17 @@ export function setFavoriteState() {
 
 export function getFavorite(id) {
   return dispatch => {
-    return favoritesRef
-      .doc(id)
+    const currentUser = firebase.auth().currentUser;
+
+    if (isNullOrUndefined(currentUser)) {
+      console.log('getFavorite: ', false);
+      return;
+    }
+
+    console.log('getFavorite: ', true);
+    const uid = currentUser.uid.toString();
+    return usersRef
+      .doc(`${uid}/favorites/${id}`)
       .get()
       .then(doc => {
         if (doc.exists) {
@@ -56,10 +65,11 @@ export function addFavorite(id, type, history) {
       return history.push(`/login`);
     }
 
-    return favoritesRef
-      .doc(id)
+    const uid = currentUser.uid.toString();
+    return usersRef
+      .doc(`${uid}/favorites/${id}`)
       .set({
-        uid: currentUser.uid.toString(),
+        uid,
         type,
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
       })
@@ -72,10 +82,17 @@ export function addFavorite(id, type, history) {
   };
 }
 
-export function deleteFavorite(id) {
+export function deleteFavorite(id, history) {
   return dispatch => {
-    return favoritesRef
-      .doc(id)
+    const currentUser = firebase.auth().currentUser;
+
+    if (isNullOrUndefined(currentUser)) {
+      return history.push(`/login`);
+    }
+
+    const uid = currentUser.uid.toString();
+    return usersRef
+      .doc(`${uid}/favorites/${id}`)
       .delete()
       .then(() => {
         dispatch(removeFavorite(id));
