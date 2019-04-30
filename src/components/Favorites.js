@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grid } from 'semantic-ui-react';
+import { Grid, Segment, Header, Container } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import ZeroHourMenu from '../containers/ZeroHourMenu';
@@ -30,6 +30,13 @@ class Favorites extends Component {
         >
           <Grid.Row>
             <ZeroHourMenu name="login" />
+          </Grid.Row>
+          <Grid.Row>
+            <Container>
+              <Header as="h1" dividing>
+                Favorites
+              </Header>
+            </Container>
           </Grid.Row>
         </Grid>
         {/* Footer */}
