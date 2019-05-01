@@ -50,9 +50,15 @@ class Footer extends Component {
               <Grid.Column width={7}>
                 <Header as="h4">Zero Hour</Header>
                 <p>
-                  Our mission is building a program that gives the option to
-                  explore both favorite and trending movies and restaurants at
-                  their own convenience.
+                  The team of Oluwatobi Adebiyi and Efosa Uwa-Omede, tasked with
+                  the mission of building a program displays potentially
+                  interesting movies while also giving them the option to
+                  explore both favorite and new food venues at their
+                  convenience. We used technologies such as React.js, Firebase,
+                  and LucidChart among others that will allow us to observe and
+                  work towards building a program that allows users to explore
+                  several types of movie and restaurant services while providing
+                  them information based on those services.
                 </p>
 
                 <span>Created by Oluwatobi Adebiyi | Efosa Uwa-Omede</span>

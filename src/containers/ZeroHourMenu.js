@@ -175,9 +175,7 @@ class ZeroHourMenu extends Component {
                 />
                 <Header as="h4" inverted>
                   {`${temperatureValue} °${temperatureUnit}`}
-                  <Header.Subheader>
-                    Temperature <br /> <i>Syosset</i>
-                  </Header.Subheader>
+                  <Header.Subheader>Temperature</Header.Subheader>
                 </Header>
               </Menu.Item>
             </Menu.Menu>
