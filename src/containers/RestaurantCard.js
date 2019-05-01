@@ -78,8 +78,8 @@ class RestaurantCard extends Component {
 
                 <Segment.Inline>
                   <Icon name="location arrow" size="small" />
-                  <span>{`${Math.round(
-                    restaurant.distance / 1609.344
+                  <span>{`${(restaurant.distance / 1609.344).toFixed(
+                    2
                   )} miles`}</span>
                 </Segment.Inline>
 
