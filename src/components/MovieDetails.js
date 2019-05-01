@@ -155,7 +155,7 @@ class MovieDetails extends Component {
 
     favorite.status
       ? dispatch(deleteFavorite(params.movieId, history))
-      : dispatch(addFavorite(params.movieId, detail, 'movie', history));
+      : dispatch(addFavorite(params.movieId, 'movie', detail, history));
   }
 
   render() {

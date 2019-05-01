@@ -2,6 +2,7 @@ import {
   ADD_FAVORITE,
   REMOVE_FAVORITE,
   TOGGLE_FAVORITE,
+  GET_FAVORITES,
   REQUIRE_FAVORITE_STATE
 } from '../actions/consts';
 
@@ -10,11 +11,18 @@ export default function favorite(
     updated: false,
     isFetching: true,
     didInvalidate: false,
-    status: false
+    status: false,
+    favorites: []
   },
   action
 ) {
   switch (action.type) {
+    case GET_FAVORITES:
+      return Object.assign({}, state, {
+        isFetching: false,
+        didInvalidate: false,
+        favorites: action.results
+      });
     case ADD_FAVORITE:
       return Object.assign({}, state, {
         isFetching: false,

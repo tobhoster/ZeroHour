@@ -13,7 +13,6 @@ import Movies from './components/Movies';
 import Restaurants from './components/Restaurants';
 import Login from './components/Login';
 import Favorites from './components/Favorites';
-import UpdateProfile from './components/UpdateProfile';
 import { requireAuthenication } from './utils/requireAuthenication';
 import RestaurantDetail from './components/RestaurantDetail';
 
@@ -36,10 +35,6 @@ class App extends Component {
           <Route
             path="/favorites"
             component={requireAuthenication(Favorites)}
-          />
-          <Route
-            path="/profile"
-            component={requireAuthenication(UpdateProfile)}
           />
           {/* Handle Toast on Components */}
           <ReduxToastr

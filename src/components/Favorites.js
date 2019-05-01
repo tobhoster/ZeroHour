@@ -7,13 +7,18 @@ import {
   Item,
   Label,
   Button,
-  Icon
+  Icon,
+  List,
+  Rating
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import ZeroHourMenu from '../containers/ZeroHourMenu';
 import Footer from '../containers/Footer';
-import { loginState } from '../actions/sessionsActions';
+import {
+  getFavoritesFromDB,
+  deleteFavorite
+} from '../actions/favoritesActions';
 
 class Favorites extends Component {
   state = { activeItem: 'upcoming' };
@@ -21,14 +26,36 @@ class Favorites extends Component {
   componentDidMount() {
     const { dispatch, history } = this.props;
 
-    dispatch(loginState(history));
+    // dispatch(loginState(history));
+    dispatch(getFavoritesFromDB(history));
+  }
+
+  deleteFavoriteResturant(id) {
+    const { dispatch, history } = this.props;
+
+    dispatch(deleteFavorite(id, history));
+  }
+
+  deleteFavoriteMovie(id) {
+    const { dispatch, history } = this.props;
+
+    dispatch(deleteFavorite(id, history));
+  }
+
+  openMovieDetails(title) {
+    this.props.history.push(`/${title}/details`);
+  }
+
+  openRestaurantDetails(title) {
+    this.props.history.push(`/restaurant/${title}/details`);
   }
 
   handleItemClick = (e, { name }) => this.setState({ activeItem: name });
 
   render() {
     // const { activeItem } = this.state;
-    // const { loggedIn } = this.props;
+    const { favorites } = this.props;
+    const favoritesData = favorites === undefined ? [] : favorites;
 
     return (
       <div>
@@ -53,82 +80,145 @@ class Favorites extends Component {
                 </Header>
 
                 <Item.Group divided>
-                  <Item>
-                    <Item.Image src="https://react.semantic-ui.com/images/wireframe/image.png" />
+                  {favoritesData.map((favorite, index) => (
+                    <Item key={index.toString()}>
+                      {favorite.type === 'movie' ? (
+                        <Item.Image
+                          src={`https://image.tmdb.org/t/p/original/${
+                            favorite.detail.poster_path
+                          }`}
+                          rounded
+                          spaced="right"
+                        />
+                      ) : (
+                        <Item.Image src={favorite.detail.image_url} rounded />
+                      )}
 
-                    <Item.Content>
-                      <Item.Header as="a">12 Years a Slave</Item.Header>
-                      <Item.Meta>
-                        <span className="cinema">Union Square 14</span>
-                      </Item.Meta>
-                      <Item.Description>
-                        Lorem Ipsum is simply dummy text of the printing and
-                        typesetting industry. Lorem Ipsum has been the
-                        industry's standard dummy text ever since the 1500s,
-                        when an unknown printer took a galley of type and
-                        scrambled it to make a type specimen book. It has
-                        survived not only five centuries, but also the leap into
-                        electronic typesetting, remaining essentially unchanged.
-                      </Item.Description>
-                      <Item.Extra>
-                        <Label>IMAX</Label>
-                        <Label icon="globe" content="Additional Languages" />
-                      </Item.Extra>
-                    </Item.Content>
-                  </Item>
+                      {favorite.type === 'movie' ? (
+                        <Item.Content>
+                          <Item.Header
+                            as="a"
+                            onClick={() =>
+                              this.openMovieDetails(favorite.detail.id)
+                            }
+                          >
+                            {favorite.detail.original_title}
+                          </Item.Header>
+                          <Item.Meta>
+                            <span className="cinema">
+                              {favorite.detail.tagline}
+                            </span>
+                          </Item.Meta>
+                          <Item.Description>
+                            {favorite.detail.overview}
+                          </Item.Description>
+                          <Item.Extra>
+                            <Button
+                              floated="right"
+                              color="red"
+                              animated
+                              onClick={() =>
+                                this.deleteFavoriteMovie(favorite.detail.id)
+                              }
+                            >
+                              <Button.Content visible>
+                                Delete Movie
+                              </Button.Content>
+                              <Button.Content hidden>
+                                <Icon name="delete" />
+                              </Button.Content>
+                            </Button>
+                            <Label>Movie</Label>
+                          </Item.Extra>
+                        </Item.Content>
+                      ) : (
+                        <Item.Content>
+                          <Item.Header
+                            as="a"
+                            onClick={() =>
+                              this.openRestaurantDetails(favorite.detail.id)
+                            }
+                          >
+                            {favorite.detail.name}
+                          </Item.Header>
+                          <Item.Meta>
+                            <List floated="right">
+                              {favorite.detail.location.display_address !==
+                              undefined ? (
+                                favorite.detail.location.display_address.map(
+                                  (address, index) => (
+                                    <List.Item key={index.toString()}>
+                                      {address}
+                                    </List.Item>
+                                  )
+                                )
+                              ) : (
+                                <div />
+                              )}
+                            </List>
+                          </Item.Meta>
+                          <Item.Description>
+                            {/* Categories */}
+                            <List horizontal bulleted>
+                              {favorite.detail.categories.map(
+                                (category, index) => (
+                                  <List.Item key={index.toString()}>
+                                    {category.title}
+                                  </List.Item>
+                                )
+                              )}
+                            </List>
+                          </Item.Description>
+                          <Item.Extra>
+                            {/* Phone */}
+                            <Header as="h5">
+                              <Header.Content>Phone</Header.Content>
+                              <Header.Subheader>
+                                {favorite.detail.display_phone}
+                              </Header.Subheader>
+                            </Header>
 
-                  <Item>
-                    <Item.Image src="https://react.semantic-ui.com/images/wireframe/image.png" />
+                            <Header as="h4" floated="right">
+                              <Header.Content>Price</Header.Content>
+                              <Header.Subheader>
+                                {favorite.detail.price}
+                              </Header.Subheader>
+                            </Header>
 
-                    <Item.Content>
-                      <Item.Header as="a">My Neighbor Totoro</Item.Header>
-                      <Item.Meta>
-                        <span className="cinema">IFC Cinema</span>
-                      </Item.Meta>
-                      <Item.Description>
-                        Lorem Ipsum is simply dummy text of the printing and
-                        typesetting industry. Lorem Ipsum has been the
-                        industry's standard dummy text ever since the 1500s,
-                        when an unknown printer took a galley of type and
-                        scrambled it to make a type specimen book. It has
-                        survived not only five centuries, but also the leap into
-                        electronic typesetting, remaining essentially unchanged.
-                      </Item.Description>
-                      <Item.Extra>
-                        <Button primary floated="right">
-                          Buy tickets
-                          <Icon name="right chevron" />
-                        </Button>
-                        <Label>Limited</Label>
-                      </Item.Extra>
-                    </Item.Content>
-                  </Item>
-
-                  <Item>
-                    <Item.Image src="https://react.semantic-ui.com/images/wireframe/image.png" />
-
-                    <Item.Content>
-                      <Item.Header as="a">Watchmen</Item.Header>
-                      <Item.Meta>
-                        <span className="cinema">IFC</span>
-                      </Item.Meta>
-                      <Item.Description>
-                        Lorem Ipsum is simply dummy text of the printing and
-                        typesetting industry. Lorem Ipsum has been the
-                        industry's standard dummy text ever since the 1500s,
-                        when an unknown printer took a galley of type and
-                        scrambled it to make a type specimen book. It has
-                        survived not only five centuries, but also the leap into
-                        electronic typesetting, remaining essentially unchanged.
-                      </Item.Description>
-                      <Item.Extra>
-                        <Button primary floated="right">
-                          Buy tickets
-                          <Icon name="right chevron" />
-                        </Button>
-                      </Item.Extra>
-                    </Item.Content>
-                  </Item>
+                            {/* Rating */}
+                            <Rating
+                              defaultRating={favorite.detail.rating}
+                              maxRating={5}
+                              disabled
+                              size="massive"
+                              style={{
+                                marginTop: '1rem',
+                                marginBottom: '1rem'
+                              }}
+                            />
+                          </Item.Extra>
+                          <Item.Extra>
+                            <Button
+                              floated="right"
+                              secondary
+                              animated
+                              onClick={() =>
+                                this.deleteFavoriteResturant(favorite.detail.id)
+                              }
+                            >
+                              <Button.Content visible>
+                                Delete Restaurant
+                              </Button.Content>
+                              <Button.Content hidden>
+                                <Icon name="delete" />
+                              </Button.Content>
+                            </Button>
+                            <Label>Restaurant</Label>
+                          </Item.Extra>
+                        </Item.Content>
+                      )}
+                    </Item>
+                  ))}
                 </Item.Group>
               </Segment>
             </Container>
@@ -142,11 +232,13 @@ class Favorites extends Component {
 }
 
 function mapStateToProps(state) {
-  const { userProfile } = state;
+  const { userProfile, favorite } = state;
   const { loggedIn } = userProfile;
+  const { favorites } = favorite;
 
   return {
-    loggedIn
+    loggedIn,
+    favorites
   };
 }
 

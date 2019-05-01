@@ -68,10 +68,6 @@ class ZeroHourMenu extends Component {
     this.props.history.push(`/favorites`);
   }
 
-  updateProfile() {
-    this.props.history.push(`/profile`);
-  }
-
   logOut() {
     const { dispatch } = this.props;
 
@@ -143,9 +139,6 @@ class ZeroHourMenu extends Component {
                     <Dropdown.Menu>
                       <Dropdown.Item onClick={() => this.favorites()}>
                         Favorites
-                      </Dropdown.Item>
-                      <Dropdown.Item onClick={() => this.updateProfile()}>
-                        Update Profile
                       </Dropdown.Item>
                       <Dropdown.Item onClick={() => this.logOut()}>
                         Log Out

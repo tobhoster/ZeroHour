@@ -64,7 +64,7 @@ class RestaurantDetail extends Component {
     favorite.status
       ? dispatch(deleteFavorite(params.restaurantId, history))
       : dispatch(
-          addFavorite(params.restaurantId, detail, 'restaurant', history)
+          addFavorite(params.restaurantId, 'restaurant', detail, history)
         );
   }
 
