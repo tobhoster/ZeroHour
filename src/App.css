@@ -19,6 +19,10 @@
   color: white;
 }
 
+body {
+  background: #1a1a1c;
+}
+
 .App-link {
   color: #61dafb;
 }
@@ -30,4 +34,60 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.card {
+  border-radius: 6px !important;
+  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.1) !important;
+  background-color: #f9f8f8 !important;
+}
+
+#app {
+  margin-top: 40px;
+}
+
+#progressInput {
+  margin: 20px auto;
+  width: 30%;
+}
+
+.circle-background,
+.circle-progress {
+  fill: '#1A1A1C';
+}
+
+.circle-background {
+  stroke: #21452c;
+}
+
+.circle-progress {
+  stroke: #1ccc74;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.circle-text {
+  font-size: 2em;
+  font-weight: bold;
+  fill: white;
+}
+
+.read-more-button {
+  display: inline-block;
+  margin-left: 3px;
+  color: #286da8;
+  cursor: pointer;
+}
+
+.read-more-button:hover {
+  color: #4591d3;
+}
+
+.textButton {
+  margin-top: 1rem;
+}
+
+.textButton:hover {
+  color: #4591d3;
+  margin-top: 1rem;
 }
